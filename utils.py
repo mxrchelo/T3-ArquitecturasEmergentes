@@ -1,6 +1,12 @@
 from db import get_db
 
 
+
+
+
+
+
+
 def insert_location(company_api_key,company_id, name, country, city, meta):
     db = get_db()
     cursor = db.cursor()
@@ -9,7 +15,7 @@ def insert_location(company_api_key,company_id, name, country, city, meta):
     rows = cursor.fetchall()
     if (len(rows) == 1):
         cursor.execute( """INSERT INTO locations(company_id, name, country, city, meta) 
-                    VALUES (?, ?, ?, ?)""",(company_id, name, country, city, meta)
+                    VALUES (?, ?, ?, ?, ?)""",(company_id, name, country, city, meta)
                     )
         db.commit()
         return True
@@ -74,8 +80,8 @@ def get_locations(company_api_key):
     else:
         return None
 
-#kdvlkñjdgjslkgjhkldfjhgjklghdfkjhdfkjlhgksjhkjsfhkljsgk
 
+#SENSORES
 
 def insert_sensor(company_api_key, location_id, name, category, meta, api_key):
     db = get_db()
@@ -86,7 +92,7 @@ def insert_sensor(company_api_key, location_id, name, category, meta, api_key):
     if (len(rows) == 1):
         cursor.execute(
             """INSERT INTO sensors(location_id, name, category, meta, api_key)
-                VALUES (?, ?, ?, ?)""",(location_id, name, category, meta, api_key)
+                VALUES (?, ?, ?, ?, ?)""",(location_id, name, category, meta, api_key)
         )
         db.commit()
         return True
@@ -94,7 +100,7 @@ def insert_sensor(company_api_key, location_id, name, category, meta, api_key):
         return None
 
 
-def update_sensor(company_api_key, id, location_id, name, category, meta):
+def update_sensor(company_api_key, location_id, name, category, meta, api_key):
     db = get_db()
     cursor = db.cursor()
     auth = f""" SELECT * FROM companies WHERE api_key = '{company_api_key}'"""
@@ -102,8 +108,8 @@ def update_sensor(company_api_key, id, location_id, name, category, meta):
     rows = cursor.fetchall()
     if (len(rows) == 1):
         cursor.execute(
-           "UPDATE locations SET location_id = ?, name = ?, category = ?, meta =? WHERE id = ?",
-           ( location_id, name, category, meta, id))
+           "UPDATE locations SET location_id = ?, name = ?, category = ?, meta =?, api_key = ? WHERE id = ?",
+           ( location_id, name, category, meta, api_key,id))
         db.commit()
         return True
     else:
@@ -117,7 +123,7 @@ def delete_sensor(company_api_key, id):
     cursor.execute(auth)
     rows = cursor.fetchall()
     if (len(rows) == 1):
-        cursor.execute("""DELETE FROM sensor WHERE id = ?""",(id)
+        cursor.execute("""DELETE FROM sensors WHERE id = ?""",(id)
         )
         db.commit()
         return True
@@ -152,18 +158,18 @@ def get_sensors(company_api_key):
         return None
 
 
-#AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+#DATOS DE SENSORES
 
-def insert_sensor_data(sensor_api_key, name, data, date):
+def insert_sensor_data(sensor_api_key, sensor_id, name, data, date):
     db = get_db()
     cursor = db.cursor()
-    auth = f""" SELECT * FROM companies WHERE api_key = '{sensor_api_key}'"""
+    auth = f""" SELECT * FROM sensores WHERE api_key = '{sensor_api_key} """
     cursor.execute(auth)
     rows = cursor.fetchall()
     if (len(rows) == 1):
         cursor.execute(
-            """INSERT INTO sensor_data(name, meta, date)
-                VALUES (?, ?, ?, ?)""",(name, data, date)
+            """INSERT INTO sensor_data(sensor_id, name, data, date)
+                VALUES (?, ?, ?, ?)""",(sensor_id, name, data, date)
         )
         db.commit()
         return True
@@ -171,26 +177,26 @@ def insert_sensor_data(sensor_api_key, name, data, date):
         return None
 
 
-def update_sensor_data(sensor_api_key, id, name, data, date):
+def update_sensor_data(company_api_key, id, sensor_id, name, data, date):
     db = get_db()
     cursor = db.cursor()
-    auth = f""" SELECT * FROM companies WHERE api_key = '{sensor_api_key}'"""
+    auth = f""" SELECT * FROM companies WHERE api_key = '{company_api_key}'"""
     cursor.execute(auth)
     rows = cursor.fetchall()
     if (len(rows) == 1):
         cursor.execute(
-           "UPDATE locations SET name = ?, data = ?, date = ? WHERE id = ?",
-           (name, data, date, id))
+           "UPDATE locations SET sensor_id = ?, name = ?, data = ?, date = ? WHERE id = ?",
+           (sensor_id, name, data, date, id))
         db.commit()
         return True
     else:
         return None
 
 
-def delete_sensor_data(sensor_api_key, id):
+def delete_sensor_data(company_api_key, id):
     db = get_db()
     cursor = db.cursor()
-    auth = f""" SELECT * FROM companies WHERE api_key = '{sensor_api_key}'"""
+    auth = f""" SELECT * FROM companies WHERE api_key = '{company_api_key}'"""
     cursor.execute(auth)
     rows = cursor.fetchall()
     if (len(rows) == 1):
@@ -202,10 +208,10 @@ def delete_sensor_data(sensor_api_key, id):
         return None
         
 
-def get_sensor_data_by_id(sensor_api_key,id):
+def get_sensor_data_by_id(company_api_key,id):
     db = get_db()
     cursor = db.cursor()
-    auth = f""" SELECT * FROM companies WHERE api_key = '{sensor_api_key}'"""
+    auth = f""" SELECT * FROM companies WHERE api_key = '{company_api_key}'"""
     cursor.execute(auth)
     rows = cursor.fetchall()
     if (len(rows) == 1):
@@ -215,11 +221,11 @@ def get_sensor_data_by_id(sensor_api_key,id):
         return None
 
 
-def get_list_sensor_data(sensor_api_key, list):
+def get_list_sensor_data(company_api_key, list):
     result = []
     db = get_db()
     cursor = db.cursor()
-    auth = f""" SELECT * FROM companies WHERE api_key = '{sensor_api_key}'"""
+    auth = f""" SELECT * FROM companies WHERE api_key = '{company_api_key}'"""
     cursor.execute(auth)
     rows = cursor.fetchall()
     if (len(rows) == 1):
