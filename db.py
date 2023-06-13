@@ -33,6 +33,7 @@ CREATE TABLE IF NOT EXISTS "sensor_data" (
 	"sensor_id"	INTEGER,
 	"name"	TEXT,
     "data" INTEGER,
+    "date"	TEXT,
 	PRIMARY KEY("id" AUTOINCREMENT)
 	FOREIGN KEY (sensor_id) REFERENCES sensors(id)
 );
@@ -56,7 +57,8 @@ INSERT INTO "locations" VALUES (1,1,'las vegas','chile','santiago','peña');
 INSERT INTO "locations" VALUES (2,1,'el chuncho','chile','santiago','san jose');
 INSERT INTO "sensors" VALUES (1,1,'t3000','proximidad','meta de t3000','t3000_key');
 INSERT INTO "sensors" VALUES (2,1,'t600','calor','meta_t600','t600_key');
-INSERT INTO "sensor_data" VALUES (1,1,NULL,NULL);
+INSERT INTO "sensor_data" VALUES (1,1,'temperatura',1, '2023-06-12T10:30:00');
+INSERT INTO "sensor_data" VALUES (2, 1,'temperatura',1, '2023-06-12T10:30:00');
 
 
 COMMIT;"""

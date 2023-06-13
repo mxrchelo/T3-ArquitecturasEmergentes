@@ -109,7 +109,7 @@ def insert_sensor_data(sensor_api_key):
     name = sensor_details["name"]
     data = sensor_details["data"]
     date = sensor_details["date"]
-    result = utils.insert_sensor(sensor_api_key, sensor_id, name, data, date)
+    result = utils.insert_sensor_data(sensor_api_key, sensor_id, name, data, date)
     return jsonify(result)
 
 @app.route("/sensor_data/<company_api_key>", methods=["PUT"])

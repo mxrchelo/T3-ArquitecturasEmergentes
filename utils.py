@@ -163,7 +163,7 @@ def get_sensors(company_api_key):
 def insert_sensor_data(sensor_api_key, sensor_id, name, data, date):
     db = get_db()
     cursor = db.cursor()
-    auth = f""" SELECT * FROM sensores WHERE api_key = '{sensor_api_key} """
+    auth = f""" SELECT * FROM sensors WHERE api_key = '{sensor_api_key}' """
     cursor.execute(auth)
     rows = cursor.fetchall()
     if (len(rows) == 1):
@@ -185,7 +185,7 @@ def update_sensor_data(company_api_key, id, sensor_id, name, data, date):
     rows = cursor.fetchall()
     if (len(rows) == 1):
         cursor.execute(
-           "UPDATE locations SET sensor_id = ?, name = ?, data = ?, date = ? WHERE id = ?",
+           "UPDATE sensor_data SET sensor_id = ?, name = ?, data = ?, date = ? WHERE id = ?",
            (sensor_id, name, data, date, id))
         db.commit()
         return True
@@ -230,9 +230,10 @@ def get_list_sensor_data(company_api_key, list):
     rows = cursor.fetchall()
     if (len(rows) == 1):
         for id in list:
-            query = cursor.execute( """SELECT * FROM sensor_data WHERE id = ?""", (id))
+            query = f"""SELECT * FROM sensor_data WHERE sensor_id = '{id}'"""
             cursor.execute(query)
-            result.append(cursor.fetchall())
+            rows = cursor.fetchall()
+            result.append(rows)
         return result
     else:
         return None
