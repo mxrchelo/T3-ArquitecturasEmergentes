@@ -4,7 +4,7 @@ from db import get_db
 def insert_location(company_api_key,company_id, name, country, city, meta):
     db = get_db()
     cursor = db.cursor()
-    auth = f""" SELECT * FROM companies WHERE api_key = {company_api_key}"""
+    auth = f""" SELECT * FROM companies WHERE api_key = '{company_api_key}'"""
     cursor.execute(auth)
     rows = cursor.fetchall()
     if (len(rows) == 1):
@@ -20,7 +20,7 @@ def insert_location(company_api_key,company_id, name, country, city, meta):
 def update_location(company_api_key, id, name, country, city, meta):
     db = get_db()
     cursor = db.cursor()
-    auth = f""" SELECT * FROM companies WHERE api_key = {company_api_key}"""
+    auth = f""" SELECT * FROM companies WHERE api_key = '{company_api_key}'"""
     cursor.execute(auth)
     rows = cursor.fetchall()
     if (len(rows) == 1):
@@ -37,7 +37,7 @@ def update_location(company_api_key, id, name, country, city, meta):
 def delete_location(company_api_key, id):
     db = get_db()
     cursor = db.cursor()
-    auth = f""" SELECT * FROM companies WHERE api_key = {company_api_key}"""
+    auth = f""" SELECT * FROM companies WHERE api_key = '{company_api_key}'"""
     cursor.execute(auth)
     rows = cursor.fetchall()
     if (len(rows) == 1):
@@ -51,7 +51,7 @@ def delete_location(company_api_key, id):
 def get_location_by_id(company_api_key,id):
     db = get_db()
     cursor = db.cursor()
-    auth = f""" SELECT * FROM companies WHERE api_key = {company_api_key}"""
+    auth = f""" SELECT * FROM companies WHERE api_key = '{company_api_key}'"""
     cursor.execute(auth)
     rows = cursor.fetchall()
     if (len(rows) == 1):
@@ -61,10 +61,10 @@ def get_location_by_id(company_api_key,id):
         return None
 
 
-def get_locations(api_key):
+def get_locations(company_api_key):
     db = get_db()
     cursor = db.cursor()
-    auth = f""" SELECT * FROM companies WHERE api_key = {company_api_key}"""
+    auth = f""" SELECT * FROM companies WHERE api_key = '{company_api_key}';"""
     cursor.execute(auth)
     rows = cursor.fetchall()
     if (len(rows) == 1):
@@ -80,7 +80,7 @@ def get_locations(api_key):
 def insert_sensor(company_api_key, location_id, name, category, meta, api_key):
     db = get_db()
     cursor = db.cursor()
-    auth = f""" SELECT * FROM companies WHERE api_key = {company_api_key}"""
+    auth = f""" SELECT * FROM companies WHERE api_key = '{company_api_key}'"""
     cursor.execute(auth)
     rows = cursor.fetchall()
     if (len(rows) == 1):
@@ -97,7 +97,7 @@ def insert_sensor(company_api_key, location_id, name, category, meta, api_key):
 def update_sensor(company_api_key, id, location_id, name, category, meta):
     db = get_db()
     cursor = db.cursor()
-    auth = f""" SELECT * FROM companies WHERE api_key = {company_api_key}"""
+    auth = f""" SELECT * FROM companies WHERE api_key = '{company_api_key}'"""
     cursor.execute(auth)
     rows = cursor.fetchall()
     if (len(rows) == 1):
@@ -113,7 +113,7 @@ def update_sensor(company_api_key, id, location_id, name, category, meta):
 def delete_sensor(company_api_key, id):
     db = get_db()
     cursor = db.cursor()
-    auth = f""" SELECT * FROM companies WHERE api_key = {company_api_key}"""
+    auth = f""" SELECT * FROM companies WHERE api_key = '{company_api_key}'"""
     cursor.execute(auth)
     rows = cursor.fetchall()
     if (len(rows) == 1):
@@ -128,7 +128,7 @@ def delete_sensor(company_api_key, id):
 def get_sensor_by_id(company_api_key,id):
     db = get_db()
     cursor = db.cursor()
-    auth = f""" SELECT * FROM companies WHERE api_key = {company_api_key}"""
+    auth = f""" SELECT * FROM companies WHERE api_key = '{company_api_key}'"""
     cursor.execute(auth)
     rows = cursor.fetchall()
     if (len(rows) == 1):
@@ -141,12 +141,92 @@ def get_sensor_by_id(company_api_key,id):
 def get_sensors(company_api_key):
     db = get_db()
     cursor = db.cursor()
-    auth = f""" SELECT * FROM companies WHERE api_key = {company_api_key}"""
+    auth = f""" SELECT * FROM companies WHERE api_key = '{company_api_key}'"""
     cursor.execute(auth)
     rows = cursor.fetchall()
     if (len(rows) == 1):
         query = "SELECT * FROM sensors"
         cursor.execute(query)
         return cursor.fetchall()
+    else:
+        return None
+
+
+#AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+
+def insert_sensor_data(sensor_api_key, name, data, date):
+    db = get_db()
+    cursor = db.cursor()
+    auth = f""" SELECT * FROM companies WHERE api_key = '{sensor_api_key}'"""
+    cursor.execute(auth)
+    rows = cursor.fetchall()
+    if (len(rows) == 1):
+        cursor.execute(
+            """INSERT INTO sensor_data(name, meta, date)
+                VALUES (?, ?, ?, ?)""",(name, data, date)
+        )
+        db.commit()
+        return True
+    else:
+        return None
+
+
+def update_sensor_data(sensor_api_key, id, name, data, date):
+    db = get_db()
+    cursor = db.cursor()
+    auth = f""" SELECT * FROM companies WHERE api_key = '{sensor_api_key}'"""
+    cursor.execute(auth)
+    rows = cursor.fetchall()
+    if (len(rows) == 1):
+        cursor.execute(
+           "UPDATE locations SET name = ?, data = ?, date = ? WHERE id = ?",
+           (name, data, date, id))
+        db.commit()
+        return True
+    else:
+        return None
+
+
+def delete_sensor_data(sensor_api_key, id):
+    db = get_db()
+    cursor = db.cursor()
+    auth = f""" SELECT * FROM companies WHERE api_key = '{sensor_api_key}'"""
+    cursor.execute(auth)
+    rows = cursor.fetchall()
+    if (len(rows) == 1):
+        cursor.execute("""DELETE FROM sensor_data WHERE id = ?""",(id)
+        )
+        db.commit()
+        return True
+    else:
+        return None
+        
+
+def get_sensor_data_by_id(sensor_api_key,id):
+    db = get_db()
+    cursor = db.cursor()
+    auth = f""" SELECT * FROM companies WHERE api_key = '{sensor_api_key}'"""
+    cursor.execute(auth)
+    rows = cursor.fetchall()
+    if (len(rows) == 1):
+        cursor.execute( """SELECT * FROM sensor_data WHERE id = ?""", (id))
+        return cursor.fetchone()
+    else:
+        return None
+
+
+def get_list_sensor_data(sensor_api_key, list):
+    result = []
+    db = get_db()
+    cursor = db.cursor()
+    auth = f""" SELECT * FROM companies WHERE api_key = '{sensor_api_key}'"""
+    cursor.execute(auth)
+    rows = cursor.fetchall()
+    if (len(rows) == 1):
+        for id in list:
+            query = cursor.execute( """SELECT * FROM sensor_data WHERE id = ?""", (id))
+            cursor.execute(query)
+            result.append(cursor.fetchall())
+        return result
     else:
         return None

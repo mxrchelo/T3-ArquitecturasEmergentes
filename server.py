@@ -87,6 +87,47 @@ def get_sensor_by_id(company_api_key,id):
     return jsonify(sensor)
 
 
+@app.route('/sensors_data/<sensor_api_key>', methods=["GET"])
+def get_list_sensor_data(sensor_api_key):
+    sensor_details = request.get_json()
+    list = sensor_details["list"]
+    sensors = utils.get_list_sensor_data(sensor_api_key, list)
+    return jsonify(sensors)
+
+
+@app.route("/sensor_data/<sensor_api_key>", methods=["POST"])
+def insert_sensor_data(sensor_api_key):
+    sensor_details = request.get_json()
+    name = sensor_details["name"]
+    data = sensor_details["data"]
+    date = sensor_details["date"]
+    result = utils.insert_sensor(sensor_api_key, name, data, date)
+    return jsonify(result)
+
+
+@app.route("/sensor_data/<sensor_api_key>", methods=["PUT"])
+def update_sensor_data(sensor_api_key):
+    sensor_details = request.get_json()
+    id = sensor_details["id"]
+    name = sensor_details["name"]
+    data = sensor_details["data"]
+    date = sensor_details["date"]
+    result = utils.update_sensor_data(sensor_api_key, id, name, data, date)
+    return jsonify(result)
+
+
+@app.route("/sensor_data/<sensor_api_key>/<id>", methods=["DELETE"])
+def delete_sensor_data(sensor_api_key,id):
+    result = utils.delete_sensor_data(sensor_api_key, id)
+    return jsonify(result)
+
+
+@app.route("/sensor_data/<sensor_api_key>/<id>", methods=["GET"])
+def get_sensor_data_by_id(sensor_api_key,id):
+    sensor = utils.get_sensor_data_by_id(sensor_api_key, id)
+    return jsonify(sensor)
+
+
 
 if __name__ == "__main__":
     create_tables()

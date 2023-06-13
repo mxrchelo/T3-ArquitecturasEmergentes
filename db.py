@@ -31,8 +31,8 @@ CREATE TABLE IF NOT EXISTS "sensors" (
 CREATE TABLE IF NOT EXISTS "sensor_data" (
 	"id"	INTEGER,
 	"sensor_id"	INTEGER,
-	"data"	TEXT,
-	"fecha"	INTEGER,
+	"name"	TEXT,
+    "data" INTEGER,
 	PRIMARY KEY("id" AUTOINCREMENT)
 	FOREIGN KEY (sensor_id) REFERENCES sensors(id)
 );
