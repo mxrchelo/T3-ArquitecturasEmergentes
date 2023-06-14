@@ -1,12 +1,5 @@
 from db import get_db
 
-
-
-
-
-
-
-
 def insert_location(company_api_key,company_id, name, country, city, meta):
     db = get_db()
     cursor = db.cursor()
@@ -100,7 +93,7 @@ def insert_sensor(company_api_key, location_id, name, category, meta, api_key):
         return None
 
 
-def update_sensor(company_api_key, location_id, name, category, meta, api_key):
+def update_sensor(company_api_key, id, location_id, name, category, meta, api_key):
     db = get_db()
     cursor = db.cursor()
     auth = f""" SELECT * FROM companies WHERE api_key = '{company_api_key}'"""
@@ -108,7 +101,7 @@ def update_sensor(company_api_key, location_id, name, category, meta, api_key):
     rows = cursor.fetchall()
     if (len(rows) == 1):
         cursor.execute(
-           "UPDATE locations SET location_id = ?, name = ?, category = ?, meta =?, api_key = ? WHERE id = ?",
+           "UPDATE sensors SET location_id = ?, name = ?, category = ?, meta =?, api_key = ? WHERE id = ?",
            ( location_id, name, category, meta, api_key,id))
         db.commit()
         return True

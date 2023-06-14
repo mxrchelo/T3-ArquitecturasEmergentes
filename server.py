@@ -80,7 +80,7 @@ def update_sensor(company_api_key):
     category = sensor_details["category"]
     meta = sensor_details["meta"]
     api_key = sensor_details["api_key"]
-    result = utils.update_sensor(company_api_key, location_id, name, category, meta, api_key)
+    result = utils.update_sensor(company_api_key, id, location_id, name, category, meta, api_key)
     return jsonify(result)
 
 
